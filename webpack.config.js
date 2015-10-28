@@ -1,4 +1,5 @@
 var cdn = (process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:8080/');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 function getEntrySources(sources) {
@@ -23,7 +24,12 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, loaders: ['react-hot', 'jsx', 'babel'], exclude: /node_modules/ },
-      { test: /\.scss$/, loaders: ['style', 'css', 'sass'] }
+      { test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') }
     ]
-  }
+  },
+  plugins: [
+      new ExtractTextPlugin('public/style.css', {
+          allChunks: true
+      })
+  ]
 };
